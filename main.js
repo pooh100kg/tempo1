@@ -18,6 +18,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    const menuToggle = document.getElementById('menu-toggle');
+    const navGlass = document.querySelector('.nav-glass');
+    
+    if (menuToggle && navGlass) {
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navGlass.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (navGlass.classList.contains('active') && !navGlass.contains(e.target) && !menuToggle.contains(e.target)) {
+                navGlass.classList.remove('active');
+                menuToggle.classList.remove('active');
+            }
+        });
+
+        navGlass.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navGlass.classList.remove('active');
+                menuToggle.classList.remove('active');
+            });
+        });
+    }
+
     if (!isMobile) {
         const splitText = (selector) => {
             document.querySelectorAll(selector).forEach(el => {
@@ -178,7 +203,6 @@ document.addEventListener('DOMContentLoaded', () => {
             gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
             osc.start();
             osc.stop(audioCtx.currentTime + 0.1);
-            if(window.pulseCanvas) window.pulseCanvas(2);
         };
 
         const dot = document.getElementById('cursor-dot');
